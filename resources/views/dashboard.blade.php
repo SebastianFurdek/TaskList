@@ -59,7 +59,7 @@
                             <div class="text-xs font-weight-bold text-info text-uppercase mb-1">
                                 Completed tasks</div>
                             <div class="h5 mb-0 font-weight-bold text-gray-800">
-                                <h2>{{ $completed_tasks_count}}</h2>
+                                <h2 id="completed-counter">{{ $completed_tasks_count}}</h2>
                             </div>
                         </div>
                         <div class="col-auto">

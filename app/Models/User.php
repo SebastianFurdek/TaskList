@@ -35,18 +35,15 @@ class User extends Authenticatable
     ];
 
     /**
-     * Get the attributes that should be cast.
+     * The attributes that should be cast.
      *
-     * @return array<string, string>
+     * @var array<string, string>
      */
-    protected function casts(): array
-    {
-        return [
-            'email_verified_at' => 'datetime',
-            'password' => 'hashed',
-            'completed_tasks_count' => 'integer',
-        ];
-    }
+    protected $casts = [
+        'email_verified_at' => 'datetime',
+        'password' => 'hashed',
+        'completed_tasks_count' => 'integer',
+    ];
 
     public function projects() { return $this->hasMany(Project::class); }
     public function tasks() { return $this->hasMany(Task::class); }

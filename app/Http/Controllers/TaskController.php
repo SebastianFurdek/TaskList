@@ -47,27 +47,27 @@ class TaskController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show($id)
+    public function show(Task $task)
     {
-        $task = Task::where('id', $id)->where('user_id', auth()->id())->firstOrFail();
+        $this->ensureOwnership($task);
         return view('tasks.show', compact('task'));
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit($id)
+    public function edit(Task $task)
     {
-        $task = Task::where('id', $id)->where('user_id', auth()->id())->firstOrFail();
+        $this->ensureOwnership($task);
         return view('tasks.edit', compact('task'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Task $task)
     {
-        $task = Task::where('id', $id)->where('user_id', auth()->id())->firstOrFail();
+        $this->ensureOwnership($task);
 
         $data = $request->validate([
             'title' => 'required|string|max:255',
@@ -86,10 +86,14 @@ class TaskController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy($id)
+    public function destroy(Task $task)
     {
-        $task = Task::where('id', $id)->where('user_id', auth()->id())->firstOrFail();
+        $this->ensureOwnership($task);
         $task->delete();
+
+        if (request()->wantsJson() || request()->ajax()) {
+            return response()->json(['success' => true, 'message' => 'Úloha zmazaná.']);
+        }
 
         return redirect()->route('tasks.index')->with('success', 'Úloha zmazaná.');
     }
@@ -97,9 +101,9 @@ class TaskController extends Controller
     /**
      * Remove the specified resource from storage (mark complete -> delete).
      */
-    public function complete($id)
+    public function complete(Task $task)
     {
-        $task = Task::where('id', $id)->where('user_id', auth()->id())->firstOrFail();
+        $this->ensureOwnership($task);
 
         // increment user's completed_tasks_count
         $user = $task->user;
@@ -107,6 +111,17 @@ class TaskController extends Controller
 
         $task->delete();
 
+        if (request()->wantsJson() || request()->ajax()) {
+            return response()->json(['success' => true, 'message' => 'Úloha dokončená a zmazaná.']);
+        }
+
         return redirect()->route('tasks.index')->with('success', 'Úloha dokončená a zmazaná.');
+    }
+
+    protected function ensureOwnership(Task $task)
+    {
+        if ($task->user_id !== auth()->id()) {
+            abort(403);
+        }
     }
 }

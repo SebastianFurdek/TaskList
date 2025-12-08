@@ -1,11 +1,12 @@
 <div class="mb-3">
     <label for="title" class="form-label">Názov</label>
-    <input type="text" name="title" id="title" class="form-control" value="{{ old('title', isset($task) ? $task->title : '') }}" required>
+    <input type="text" name="title" id="title" class="form-control" value="{{ old('title', isset($task) ? $task->title : '') }}" required placeholder="Napíšte názov úlohy">
 </div>
 
 <div class="mb-3">
     <label for="description" class="form-label">Popis</label>
-    <textarea name="description" id="description" class="form-control">{{ old('description', isset($task) ? $task->description : '') }}</textarea>
+    <textarea name="description" id="description" class="form-control" rows="4" placeholder="Krátky popis úlohy">{{ old('description', isset($task) ? $task->description : '') }}</textarea>
+    <div class="form-text">Maximálne 1000 znakov. (Server-side validačné pravidlá aplikované.)</div>
 </div>
 
 <div class="mb-3">
