@@ -7,7 +7,7 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name', 'Laravel') }}</title>
+  <title>{{ config('app.name', 'Laravel') }}</title>
 
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.bunny.net">
@@ -23,8 +23,8 @@
     <div id="app">
         <nav class="navbar navbar-expand-md navbar-dark bg-primary shadow-sm">
             <div class="container">
-                <a class="navbar-brand text-white d-flex align-items-center" href="{{ url('/') }}">
-                    <span>{{ config('app.name', 'Laravel') }}</span>
+                <a class="navbar-brand text-white d-flex align-items-center" href="{{ url('/dashboard') }}">
+                    <span>TaskManager</span>
                 </a>
                 <div class="vr mx-2" style="height:28px; background-color: rgba(255,255,255,0.25);"></div>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">

@@ -44,3 +44,38 @@
 .link-btn:hover {
     text-decoration: underline;
 }
+
+/* Compact task list styling */
+.list-group-item {
+    padding-top: 0.35rem !important;
+    padding-bottom: 0.35rem !important;
+}
+
+.list-group-item .form-check-input {
+    margin-top: 0 !important;
+    margin-left: 0 !important;
+}
+
+.list-group-item .text-truncate {
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.list-group-item .btn-sm {
+    padding: 0.18rem 0.32rem;
+    font-size: 0.85rem;
+}
+
+.list-group-item .small.text-muted {
+    font-size: 0.78rem;
+}
+
+/* ensure the actions block does not wrap */
+.list-group-item > .d-flex.align-items-center {
+    white-space: nowrap;
+}
+
+/* Slightly reduce hr spacing */
+hr.my-1 { margin-top: 0.35rem; margin-bottom: 0.35rem; }
