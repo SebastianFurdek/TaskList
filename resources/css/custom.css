@@ -1,0 +1,46 @@
+/* Vlastné tlačidlá */
+.btn-custom {
+    background-color: #4CAF50;
+    color: white;
+    padding: 12px 25px;
+    border-radius: 8px;
+    border: none;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.btn-custom:hover {
+    background-color: #45a049;
+}
+
+/* Wrapper pre auth stránky */
+.auth-wrapper {
+    max-width: 400px;
+    margin: 80px auto;
+    padding: 25px;
+    background-color: #f9f9f9;
+    border-radius: 12px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.05);
+}
+
+/* Inputy */
+.auth-input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+}
+
+/* Link ako button */
+.link-btn {
+    display: inline-block;
+    margin-top: 15px;
+    text-decoration: none;
+    color: #0066cc;
+    font-weight: bold;
+}
+
+.link-btn:hover {
+    text-decoration: underline;
+}

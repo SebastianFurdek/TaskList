@@ -16,9 +16,8 @@ return new class extends Migration
             $table->string('name');
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
-            $table->string('password_hash');
-            $table->dateTime("created_at")->useCurrent();
-            $table->dateTime("updated_at")->useCurrent()->useCurrentOnUpdate();
+            $table->string('password');
+            // use Laravel timestamps() helper instead of manual created_at/updated_at
             $table->rememberToken();
             $table->timestamps();
         });
