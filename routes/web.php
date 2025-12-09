@@ -1,60 +1,49 @@
 <?php
 
-use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TaskController;
+use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\Auth\ForgotPasswordController;
+use App\Http\Controllers\Auth\ResetPasswordController;
+
+// Welcome page
+Route::get('/', function () {
+    return view('welcome');
+});
 
 // Dashboard
-Route::get('/', function () { return view('welcome'); });
-Route::get('/dashboard', [\App\Http\Controllers\DashboardController::class, 'index'])
-    ->middleware(['auth'])
+Route::get('/dashboard', [DashboardController::class, 'index'])
+    ->middleware('auth')
     ->name('dashboard');
 
-// Authentication (using controllers in App\Http\Controllers\Auth)
-Route::get('/login', [\App\Http\Controllers\Auth\AuthenticatedSessionController::class, 'create'])->name('login');
-Route::post('/login', [\App\Http\Controllers\Auth\AuthenticatedSessionController::class, 'store']);
-Route::post('/logout', [\App\Http\Controllers\Auth\AuthenticatedSessionController::class, 'destroy'])->name('logout');
+// Authentication - Login
+Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
+Route::post('/login', [LoginController::class, 'login']);
+Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
-Route::get('/register', [\App\Http\Controllers\Auth\RegisteredUserController::class, 'create'])->name('register');
-Route::post('/register', [\App\Http\Controllers\Auth\RegisteredUserController::class, 'store']);
+// Authentication - Register
+Route::get('/register', [RegisterController::class, 'showRegistrationForm'])->name('register');
+Route::post('/register', [RegisterController::class, 'register']);
 
 // Password Reset
-Route::get('/forgot-password', [\App\Http\Controllers\Auth\PasswordResetLinkController::class, 'create'])->middleware('guest')->name('password.request');
-Route::post('/forgot-password', [\App\Http\Controllers\Auth\PasswordResetLinkController::class, 'store'])->middleware('guest')->name('password.email');
+Route::get('/password/reset', [ForgotPasswordController::class, 'showLinkRequestForm'])
+    ->name('password.request');
+Route::post('/password/email', [ForgotPasswordController::class, 'sendResetLinkEmail'])
+    ->name('password.email');
+Route::get('/password/reset/{token}', [ResetPasswordController::class, 'showResetForm'])
+    ->name('password.reset');
+Route::post('/password/reset', [ResetPasswordController::class, 'reset'])
+    ->name('password.update');
 
-Route::get('/reset-password/{token}', [\App\Http\Controllers\Auth\NewPasswordController::class, 'create'])->middleware('guest')->name('password.reset');
-Route::post('/reset-password', [\App\Http\Controllers\Auth\NewPasswordController::class, 'store'])->middleware('guest')->name('password.update');
-
-// Password Confirm
-Route::get('/confirm-password', [\App\Http\Controllers\Auth\ConfirmPasswordController::class, 'showConfirmForm'])->middleware('auth')->name('password.confirm');
-Route::post('/confirm-password', [\App\Http\Controllers\Auth\ConfirmPasswordController::class, 'confirm'])->middleware('auth');
-
-// Email Verification
-Route::get('/verify-email', \App\Http\Controllers\Auth\EmailVerificationPromptController::class)->middleware('auth')->name('verification.notice');
-Route::get('/email/verify/{id}/{hash}', \App\Http\Controllers\Auth\VerifyEmailController::class)
-    ->middleware(['auth', 'signed'])
-    ->name('verification.verify');
-Route::post('/email/verification-notification', [\App\Http\Controllers\Auth\EmailVerificationNotificationController::class, 'store'])
-    ->middleware(['auth', 'throttle:6,1'])
-    ->name('verification.send');
-
-// resend verification route expected by views/tests
-Route::post('/email/resend', [\App\Http\Controllers\Auth\EmailVerificationNotificationController::class, 'store'])
-    ->middleware(['auth', 'throttle:6,1'])
-    ->name('verification.resend');
-
-// Profile (custom)
+// Profile - custom
 Route::get('/profile', [ProfileController::class, 'show'])->middleware('auth');
 Route::patch('/profile', [ProfileController::class, 'update'])->middleware('auth');
 Route::delete('/profile', [ProfileController::class, 'destroy'])->middleware('auth');
 
-// Password update for authenticated user
-Route::put('/password', [\App\Http\Controllers\Auth\PasswordController::class, 'update'])->middleware('auth');
-
-// Tasks resource
-Route::post('tasks/{task}/complete', [\App\Http\Controllers\TaskController::class, 'complete'])->name('tasks.complete')->middleware('auth');
-Route::resource('tasks', TaskController::class)
-    ->middleware(['auth']);
-
-// Home fallback
-Route::get('/home', [\App\Http\Controllers\HomeController::class, 'index'])->name('home');
+// Tasks - custom
+Route::post('tasks/{task}/complete', [TaskController::class, 'complete'])->name('tasks.complete')->middleware('auth');
+Route::resource('tasks', TaskController::class)->middleware('auth');
