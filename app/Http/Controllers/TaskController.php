@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Task;
+use App\Models\Project;
 
 class TaskController extends Controller
 {
@@ -21,7 +22,9 @@ class TaskController extends Controller
      */
     public function create()
     {
-        return view('tasks.create');
+        // pass user's projects for assignment
+        $projects = Project::where('user_id', auth()->id())->get();
+        return view('tasks.create', compact('projects'));
     }
 
     /**
@@ -34,7 +37,16 @@ class TaskController extends Controller
             'description' => 'nullable|string',
             'due_date' => 'nullable|date',
             'completed' => 'sometimes|boolean',
+            'project_id' => 'nullable|integer|exists:projects,id',
         ]);
+
+        // if project_id provided, ensure the project belongs to the user
+        if (!empty($data['project_id'])) {
+            $project = Project::where('id', $data['project_id'])->where('user_id', auth()->id())->first();
+            if (! $project) {
+                return back()->withErrors(['project_id' => 'Neplatný projekt'])->withInput();
+            }
+        }
 
         $data['user_id'] = auth()->id();
         $data['completed'] = isset($data['completed']) && $data['completed'] ? 1 : 0;
@@ -59,7 +71,8 @@ class TaskController extends Controller
     public function edit(Task $task)
     {
         $this->ensureOwnership($task);
-        return view('tasks.edit', compact('task'));
+        $projects = Project::where('user_id', auth()->id())->get();
+        return view('tasks.edit', compact('task','projects'));
     }
 
     /**
@@ -74,7 +87,15 @@ class TaskController extends Controller
             'description' => 'nullable|string',
             'due_date' => 'nullable|date',
             'completed' => 'sometimes|boolean',
+            'project_id' => 'nullable|integer|exists:projects,id',
         ]);
+
+        if (!empty($data['project_id'])) {
+            $project = Project::where('id', $data['project_id'])->where('user_id', auth()->id())->first();
+            if (! $project) {
+                return back()->withErrors(['project_id' => 'Neplatný projekt'])->withInput();
+            }
+        }
 
         $data['completed'] = isset($data['completed']) && $data['completed'] ? 1 : 0;
 

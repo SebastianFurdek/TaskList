@@ -6,7 +6,6 @@ window.Alpine = Alpine;
 
 Alpine.start();
 
-// Custom JS: confirmation for destructive actions and AJAX complete
 document.addEventListener('DOMContentLoaded', function () {
     // Confirm before delete (for forms with method DELETE)
     document.addEventListener('submit', function (e) {
@@ -100,7 +99,7 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 
-    // Intercept complete forms (fallback for other layouts)
+    // Handle form-based completes (show view)
     document.querySelectorAll('form[action][method="POST"]').forEach(function (form) {
         const action = form.getAttribute('action');
         if (action && action.includes('/tasks/') && action.includes('/complete')) {

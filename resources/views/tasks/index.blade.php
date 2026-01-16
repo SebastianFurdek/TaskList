@@ -39,6 +39,9 @@
                         <div class="flex-grow-1 ms-1 me-3" style="min-width:0;">
                             <div class="d-flex align-items-center">
                                 <a href="{{ route('tasks.show', $task->id) }}" class="mb-0 text-decoration-none fw-semibold text-truncate {{ $task->completed ? 'text-decoration-line-through text-muted' : '' }}" style="max-width:100%;">{{ $task->title }}</a>
+                                @if($task->project)
+                                    <span class="badge bg-secondary ms-2 small">{{ $task->project->name }}</span>
+                                @endif
                             </div>
                             <div class="small text-muted text-truncate" style="max-width:100%;">{{ Str::limit($task->description, 80) }}</div>
                         </div>

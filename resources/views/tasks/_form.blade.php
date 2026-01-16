@@ -10,6 +10,21 @@
 </div>
 
 <div class="mb-3">
+    <label for="project_id" class="form-label">Priradiť k projektu</label>
+    <select name="project_id" id="project_id" class="form-select">
+        <option value="">-- Bez projektu --</option>
+        @if(isset($projects) && $projects->count())
+            @foreach($projects as $projectOption)
+                <option value="{{ $projectOption->id }}" {{ old('project_id', isset($task) && $task->project_id ? $task->project_id : '') == $projectOption->id ? 'selected' : '' }}>
+                    {{ $projectOption->name }}
+                </option>
+            @endforeach
+        @endif
+    </select>
+    @error('project_id')<div class="text-danger small">{{ $message }}</div>@enderror
+</div>
+
+<div class="mb-3">
     <label for="due_date" class="form-label">Termín</label>
     <input type="date" name="due_date" id="due_date" class="form-control" value="{{ old('due_date', isset($task) && $task->due_date ? $task->due_date->format('Y-m-d') : '') }}">
 </div>

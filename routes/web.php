@@ -9,7 +9,6 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\Auth\ResetPasswordController;
-
 // Welcome page
 Route::get('/', function () {
     return view('welcome');
@@ -47,3 +46,9 @@ Route::delete('/profile', [ProfileController::class, 'destroy'])->middleware('au
 // Tasks - custom
 Route::post('tasks/{task}/complete', [TaskController::class, 'complete'])->name('tasks.complete')->middleware('auth');
 Route::resource('tasks', TaskController::class)->middleware('auth');
+
+//projects
+use App\Http\Controllers\ProjectController;
+Route::middleware(['auth'])->group(function () {
+    Route::resource('/projects', ProjectController::class);
+});
