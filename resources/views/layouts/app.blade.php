@@ -37,12 +37,8 @@
                         <li class="nav-item">
                             <a class="nav-link text-white" href="{{ route('dashboard') }}">Dashboard</a>
                         </li>
-                        <li class="nav-item dropdown">
-                            <a class="nav-link text-white dropdown-toggle" href="#" id="projectsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">Projekty</a>
-                            <ul class="dropdown-menu" aria-labelledby="projectsDropdown">
-                                <li><a class="dropdown-item">Projekt A</a></li>
-                                <li><a class="dropdown-item">Projekt B</a></li>
-                            </ul>
+                        <li class="nav-item">
+                            <a class="nav-link text-white {{ request()->routeIs('projects.*') ? 'active' : '' }}" href="{{ route('projects.index') }}">Projekty</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link text-white" href="{{ route('tasks.index') }}">Úlohy</a>
