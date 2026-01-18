@@ -98,5 +98,7 @@
             </div>
         </main>
     </div>
+    {{-- render pushed scripts from child views --}}
+    @stack('scripts')
 </body>
 </html>
