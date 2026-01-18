@@ -51,8 +51,14 @@ Route::resource('tasks', TaskController::class)->middleware('auth');
 
 //projects
 use App\Http\Controllers\ProjectController;
+use App\Http\Controllers\ProjectAttachmentController;
 Route::middleware(['auth'])->group(function () {
     Route::resource('/projects', ProjectController::class);
+
+    // project attachments
+    Route::post('/projects/{project}/attachments', [ProjectAttachmentController::class, 'store'])->name('projects.attachments.store');
+    Route::get('/projects/{project}/attachments/{attachment}/download', [ProjectAttachmentController::class, 'download'])->name('projects.attachments.download');
+    Route::delete('/projects/{project}/attachments/{attachment}', [ProjectAttachmentController::class, 'destroy'])->name('projects.attachments.destroy');
 });
 
 // Categories routes

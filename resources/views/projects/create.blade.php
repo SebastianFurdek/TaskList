@@ -2,6 +2,9 @@
 
 @section('content')
 <div class="container py-4">
+    @if(session('warning'))
+        <div class="alert alert-warning">{{ session('warning') }}</div>
+    @endif
     <div class="d-flex justify-content-between align-items-center mb-3">
         <div>
             <h1 class="h3 mb-1">Nový projekt</h1>
@@ -12,7 +15,7 @@
     </div>
 
     <div class="card p-4">
-        <form action="{{ route('projects.store') }}" method="POST">
+        <form action="{{ route('projects.store') }}" method="POST" enctype="multipart/form-data">
             @csrf
 
             <div class="mb-3">
@@ -27,6 +30,12 @@
                 @error('description')<div class="text-danger small">{{ $message }}</div>@enderror
             </div>
 
+            <div class="mb-3">
+                <label class="form-label">Prílohy (voliteľné)</label>
+                <input type="file" name="attachments[]" class="form-control" multiple>
+                @error('attachments.*')<div class="text-danger small">{{ $message }}</div>@enderror
+            </div>
+
             <div class="d-flex justify-content-end">
                 <button class="btn btn-primary">Vytvoriť</button>
             </div>
@@ -34,4 +43,3 @@
     </div>
 </div>
 @endsection
-

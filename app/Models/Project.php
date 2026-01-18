@@ -19,4 +19,10 @@ class Project extends Model
     {
         return $this->hasMany(Task::class);
     }
+
+    // Projekt má viac príloh
+    public function attachments()
+    {
+        return $this->hasMany(\App\Models\ProjectAttachment::class);
+    }
 }
