@@ -172,6 +172,8 @@
 .task-item {
     background: #f6f7f9; /* subtle light-gray background so item stands out from page */
     border-radius: 10px;
+    /*oramovanie sivou farbou*/
+    border: 1px solid #e0e0e0;
     padding: 12px 14px 12px 18px; /* extra left padding to make room for the strip */
     margin-bottom: 10px;
     box-shadow: 0 1px 4px rgba(15,23,42,0.06); /* soft shadow for separation */

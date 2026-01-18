@@ -41,6 +41,9 @@
                             <a class="nav-link text-white {{ request()->routeIs('projects.*') ? 'active' : '' }}" href="{{ route('projects.index') }}">Projekty</a>
                         </li>
                         <li class="nav-item">
+                            <a class="nav-link text-white {{ request()->routeIs('categories.*') ? 'active' : '' }}" href="{{ route('categories.index') }}">Kategórie</a>
+                        </li>
+                        <li class="nav-item">
                             <a class="nav-link text-white" href="{{ route('tasks.index') }}">Úlohy</a>
                         </li>
                     </ul>

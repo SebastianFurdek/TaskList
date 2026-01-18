@@ -44,7 +44,9 @@ Route::patch('/profile', [ProfileController::class, 'update'])->middleware('auth
 Route::delete('/profile', [ProfileController::class, 'destroy'])->middleware('auth');
 
 // Tasks - custom
-Route::post('tasks/{task}/complete', [TaskController::class, 'complete'])->name('tasks.complete')->middleware('auth');
+// add a GET endpoint for AJAX-friendly complete (calls same controller method)
+Route::get('tasks/{id}/complete-now', [TaskController::class, 'complete'])->name('tasks.complete.get')->middleware('auth');
+Route::post('tasks/{id}/complete', [TaskController::class, 'complete'])->name('tasks.complete')->middleware('auth');
 Route::resource('tasks', TaskController::class)->middleware('auth');
 
 //projects

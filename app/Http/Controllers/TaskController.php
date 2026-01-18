@@ -150,9 +150,17 @@ class TaskController extends Controller
     /**
      * Remove the specified resource from storage (mark complete -> delete).
      */
-    public function complete(Task $task)
+    public function complete(Request $request, $id)
     {
-        $this->ensureOwnership($task);
+        // find task belonging to current user
+        $task = Task::where('id', $id)->where('user_id', auth()->id())->first();
+        if (! $task) {
+            // idempotent: if task is already deleted or not accessible, treat as success for AJAX clients
+            if ($request->wantsJson() || $request->ajax()) {
+                return response()->json(['success' => true, 'message' => 'Úloha už spracovaná alebo neexistuje.'], 200);
+            }
+            return redirect()->route('tasks.index')->with('success', 'Úloha už spracovaná alebo neexistuje.');
+        }
 
         // increment user's completed_tasks_count
         $user = $task->user;
@@ -160,7 +168,7 @@ class TaskController extends Controller
 
         $task->delete();
 
-        if (request()->wantsJson() || request()->ajax()) {
+        if ($request->wantsJson() || $request->ajax()) {
             return response()->json(['success' => true, 'message' => 'Úloha dokončená a zmazaná.']);
         }
 
