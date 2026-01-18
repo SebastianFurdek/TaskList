@@ -26,9 +26,9 @@
                 <p class="mb-0">Nemáte žiadne úlohy. Vytvorte si prvú úlohu kliknutím na tlačidlo <strong>Nová úloha</strong>.</p>
             </div>
         @else
-            <div class="list-group">
+            <div class="">
                 @foreach($tasks as $task)
-                    <div class="list-group-item d-flex align-items-center py-2" data-task-id="{{ $task->id }}">
+                    <div class="task-item d-flex align-items-center {{ $task->completed ? 'task-completed' : '' }}" data-task-id="{{ $task->id }}">
                         {{-- checkbox (left) --}}
                         <form action="{{ route('tasks.complete', $task->id) }}" method="POST" class="me-2 complete-form">
                             @csrf
@@ -37,7 +37,7 @@
 
                         {{-- title + single-line description (center), allow truncation --}}
                         <div class="flex-grow-1 ms-1 me-3" style="min-width:0;">
-                            <div class="d-flex align-items-center">
+                            <div class="d-flex align-items-center flex-wrap">
                                 <a href="{{ route('tasks.show', $task->id) }}" class="mb-0 text-decoration-none fw-semibold text-truncate {{ $task->completed ? 'text-decoration-line-through text-muted' : '' }}" style="max-width:100%;">{{ $task->title }}</a>
                                 @if($task->project)
                                     <span class="badge bg-secondary ms-2 small">{{ $task->project->name }}</span>
@@ -48,12 +48,12 @@
                                     <div class="ms-2 d-flex flex-wrap gap-1">
                                         @foreach($task->categories as $cat)
                                             @php $bg = $cat->color ?? '#6c757d'; @endphp
-                                            <span class="category-badge" style="background: {{ $bg }};">{{ $cat->name }}</span>
+                                            <span class="category-badge small" style="background: {{ $bg }};">{{ $cat->name }}</span>
                                         @endforeach
                                     </div>
                                 @endif
                             </div>
-                            <div class="small text-muted text-truncate" style="max-width:100%;">{{ Str::limit($task->description, 80) }}</div>
+                            <div class="small text-muted text-truncate mt-1" style="max-width:100%;">{{ Str::limit($task->description, 80) }}</div>
                         </div>
 
                         {{-- due date + actions (right) --}}
@@ -74,9 +74,6 @@
                             </form>
                         </div>
                     </div>
-                    @if(! $loop->last)
-                        <hr class="my-1" />
-                    @endif
                 @endforeach
             </div>
         @endif

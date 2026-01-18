@@ -168,4 +168,36 @@
 /* zabezpečí, že text a ikona budú nad pásikom */
 .card-body { position: relative; z-index: 2; }
 
+/* Task item card/list row */
+.task-item {
+    background: #ffffff;
+    border: 1px solid rgba(33,37,41,0.06);
+    border-radius: 10px;
+    padding: 10px 12px;
+    margin-bottom: 8px;
+    transition: transform .12s ease, box-shadow .12s ease, background-color .12s ease;
+}
+
+.task-item:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 24px rgba(15, 23, 42, 0.08);
+    background: linear-gradient(180deg, #ffffff, #fbfbfd);
+}
+
+/* Slightly muted appearance for tasks marked completed */
+.task-item.task-completed {
+    opacity: 0.85;
+    filter: grayscale(8%);
+}
+
+/* Make internal layout consistent: left checkbox, content, actions */
+.task-item .complete-form { flex: 0 0 auto; }
+.task-item .flex-grow-1 { min-width: 0; }
+
+/* small responsive tweak */
+@media (max-width: 576px) {
+    .task-item { padding: 8px; }
+    .task-item .small.text-muted { font-size: 11px; }
+}
+
 /* end of file */
