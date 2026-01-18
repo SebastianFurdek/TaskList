@@ -19,14 +19,15 @@ class CategoryController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create(Request $request)
+    public function create()
     {
+        return view('categories.create');
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Category $request)
+    public function store(Request $request)
     {
         $data = $request->validate([
             'name' => 'required|string|max:255',
@@ -43,24 +44,44 @@ class CategoryController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Request $request)
+    public function show(Category $category)
     {
+        if ($category->user_id !== auth()->id()) {
+            abort(403);
+        }
+
+        return view('categories.show', compact('category'));
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(Category $category)
     {
-        //
+        if ($category->user_id !== auth()->id()) {
+            abort(403);
+        }
+
+        return view('categories.edit', compact('category'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, Category $category)
     {
-        //
+        if ($category->user_id !== auth()->id()) {
+            abort(403);
+        }
+
+        $data = $request->validate([
+            'name' => 'required|string|max:255',
+            'color' => 'nullable|string|max:20',
+        ]);
+
+        $category->update($data);
+
+        return redirect()->route('categories.index')->with('success', 'Kategória upravená.');
     }
 
     /**
