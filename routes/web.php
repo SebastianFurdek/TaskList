@@ -52,3 +52,9 @@ use App\Http\Controllers\ProjectController;
 Route::middleware(['auth'])->group(function () {
     Route::resource('/projects', ProjectController::class);
 });
+
+// Categories routes
+use App\Http\Controllers\CategoryController;
+Route::middleware(['auth'])->group(function () {
+    Route::resource('/categories', CategoryController::class)->except(['show']);
+});
