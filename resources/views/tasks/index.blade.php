@@ -42,6 +42,16 @@
                                 @if($task->project)
                                     <span class="badge bg-secondary ms-2 small">{{ $task->project->name }}</span>
                                 @endif
+
+                                {{-- category badges --}}
+                                @if($task->categories && $task->categories->count())
+                                    <div class="ms-2 d-flex flex-wrap gap-1">
+                                        @foreach($task->categories as $cat)
+                                            @php $bg = $cat->color ?? '#6c757d'; @endphp
+                                            <span class="category-badge" style="background: {{ $bg }};">{{ $cat->name }}</span>
+                                        @endforeach
+                                    </div>
+                                @endif
                             </div>
                             <div class="small text-muted text-truncate" style="max-width:100%;">{{ Str::limit($task->description, 80) }}</div>
                         </div>

@@ -25,18 +25,24 @@
 </div>
 
 <div class="mb-3">
-    <label for="categories" class="form-label">Kategórie (viacnásobný výber)</label>
-    <select name="categories[]" id="categories" class="form-select" multiple>
+    <label for="categories" class="form-label">Kategórie</label>
+    <div class="d-flex flex-wrap gap-2">
         @if(isset($categories) && $categories->count())
+            @php
+                $selected = old('categories', isset($task) ? $task->categories->pluck('id')->toArray() : []);
+            @endphp
             @foreach($categories as $catOption)
-                <option value="{{ $catOption->id }}"
-                    {{ in_array($catOption->id, old('categories', isset($task) ? $task->categories->pluck('id')->toArray() : [])) ? 'selected' : '' }}>
-                    {{ $catOption->name }}
-                </option>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" name="categories[]" value="{{ $catOption->id }}" id="cat_{{ $catOption->id }}"
+                        {{ in_array($catOption->id, $selected) ? 'checked' : '' }}>
+                    <label class="form-check-label" for="cat_{{ $catOption->id }}">{{ $catOption->name }}</label>
+                </div>
             @endforeach
+        @else
+            <div class="text-muted">Zatiaľ žiadne kategórie.</div>
         @endif
-    </select>
-    <div class="form-text">Podržte Ctrl/CMD pre viacnásobný výber.</div>
+    </div>
+    <div class="form-text">Vyberte všetky relevantné kategórie.</div>
     @error('categories')<div class="text-danger small">{{ $message }}</div>@enderror
     @error('categories.*')<div class="text-danger small">{{ $message }}</div>@enderror
 </div>

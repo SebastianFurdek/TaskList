@@ -92,6 +92,33 @@
     border-radius: 12px;
     font-size: 12px;
 }
+
+/* category badge used on tasks list */
+.category-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: .4rem;
+    color: #000; /* use black text as requested */
+    padding: 4px 10px;
+    border-radius: 999px; /* fully pill-shaped */
+    font-size: 12px;
+    font-weight: 600;
+    line-height: 1;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+    border: 1px solid rgba(0,0,0,0.06);
+    /* remove text-shadow so black text is crisp */
+    transition: transform .12s ease, box-shadow .12s ease, opacity .12s ease;
+}
+.category-badge:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 18px rgba(0,0,0,0.12);
+}
+.category-badge.small {
+    font-size: 11px;
+    padding: 3px 8px;
+    font-weight: 500;
+}
+
 .custom-btn {
     background-color: #212529;
     color: #fff;
@@ -140,4 +167,5 @@
 
 /* zabezpečí, že text a ikona budú nad pásikom */
 .card-body { position: relative; z-index: 2; }
-s
+
+/* end of file */
