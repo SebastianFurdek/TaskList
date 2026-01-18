@@ -170,18 +170,32 @@
 
 /* Task item card/list row */
 .task-item {
-    background: #ffffff;
-    border: 1px solid rgba(33,37,41,0.06);
+    background: #f6f7f9; /* subtle light-gray background so item stands out from page */
     border-radius: 10px;
-    padding: 10px 12px;
-    margin-bottom: 8px;
-    transition: transform .12s ease, box-shadow .12s ease, background-color .12s ease;
+    padding: 12px 14px 12px 18px; /* extra left padding to make room for the strip */
+    margin-bottom: 10px;
+    box-shadow: 0 1px 4px rgba(15,23,42,0.06); /* soft shadow for separation */
+    transition: transform .15s ease, box-shadow .15s ease, background-color .12s ease;
+    position: relative; /* needed for the left accent strip */
+}
+
+/* left gray accent strip */
+.task-item::before {
+    content: "";
+    position: absolute;
+    left: 8px; /* small inset so strip doesn't touch outer container edge */
+    top: 8px;
+    width: 6px;
+    height: calc(100% - 16px); /* respect top/bottom inset */
+    border-radius: 4px;
+    background-color: #e0e0e0; /* subtle gray strip */
+    z-index: 1;
 }
 
 .task-item:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 8px 24px rgba(15, 23, 42, 0.08);
-    background: linear-gradient(180deg, #ffffff, #fbfbfd);
+    transform: translateY(-6px);
+    box-shadow: 0 14px 40px rgba(15,23,42,0.12);
+    background: #ffffff; /* slightly brighter on hover */
 }
 
 /* Slightly muted appearance for tasks marked completed */
@@ -194,10 +208,97 @@
 .task-item .complete-form { flex: 0 0 auto; }
 .task-item .flex-grow-1 { min-width: 0; }
 
+/* ensure card content sits above the strip */
+.task-item > * { position: relative; z-index: 2; }
+
 /* small responsive tweak */
 @media (max-width: 576px) {
-    .task-item { padding: 8px; }
+    .task-item { padding: 10px; }
+    .task-item::before { left: 10px; top: 10px; height: calc(100% - 20px); }
     .task-item .small.text-muted { font-size: 11px; }
 }
+
+/* Dashboard card style */
+.dashboard-card {
+    border-radius: 12px;
+    padding: 0; /* inner padding handled by .card-body */
+    transition: transform .15s ease, box-shadow .15s ease, background-color .15s ease;
+    will-change: transform;
+    overflow: hidden;
+}
+.dashboard-card .card-body {
+    padding: 1rem 1.15rem;
+}
+.dashboard-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 20px 40px rgba(15, 23, 42, 0.12);
+    background-color: #ffffff;
+}
+
+/* subtle accent strip already exists via .card-left-* classes; ensure the strip stays visible */
+.dashboard-card.border-left-primary { border-left-width: 6px; }
+.dashboard-card.border-left-success { border-left-width: 6px; }
+.dashboard-card.border-left-info { border-left-width: 6px; }
+
+/* Left accent strip for cards (match markup using "border-left-*" classes) */
+.card.border-left-primary::before,
+.dashboard-card.border-left-primary::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 6px;
+    height: 100%;
+    border-radius: 0.25rem 0 0 0.25rem;
+    background-color: #4e73df;
+    z-index: 1; /* behind card-body (which uses z-index:2) */
+}
+
+.card.border-left-success::before,
+.dashboard-card.border-left-success::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 6px;
+    height: 100%;
+    border-radius: 0.25rem 0 0 0.25rem;
+    background-color: #1cc88a;
+    z-index: 1;
+}
+
+.card.border-left-info::before,
+.dashboard-card.border-left-info::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 6px;
+    height: 100%;
+    border-radius: 0.25rem 0 0 0.25rem;
+    background-color: #36b9cc;
+    z-index: 1;
+}
+
+.card.border-left-warning::before,
+.dashboard-card.border-left-warning::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 6px;
+    height: 100%;
+    border-radius: 0.25rem 0 0 0.25rem;
+    background-color: #f6c23e;
+    z-index: 1;
+}
+
+/* Left accent strip for task items */
+.task-item {
+    position: relative; /* needed for pseudo-element */
+}
+
+/* ensure card content sits above the strip */
+.task-item > * { position: relative; z-index: 2; }
 
 /* end of file */
