@@ -25,6 +25,23 @@
 </div>
 
 <div class="mb-3">
+    <label for="categories" class="form-label">Kategórie (viacnásobný výber)</label>
+    <select name="categories[]" id="categories" class="form-select" multiple>
+        @if(isset($categories) && $categories->count())
+            @foreach($categories as $catOption)
+                <option value="{{ $catOption->id }}"
+                    {{ in_array($catOption->id, old('categories', isset($task) ? $task->categories->pluck('id')->toArray() : [])) ? 'selected' : '' }}>
+                    {{ $catOption->name }}
+                </option>
+            @endforeach
+        @endif
+    </select>
+    <div class="form-text">Podržte Ctrl/CMD pre viacnásobný výber.</div>
+    @error('categories')<div class="text-danger small">{{ $message }}</div>@enderror
+    @error('categories.*')<div class="text-danger small">{{ $message }}</div>@enderror
+</div>
+
+<div class="mb-3">
     <label for="due_date" class="form-label">Termín</label>
     <input type="date" name="due_date" id="due_date" class="form-control" value="{{ old('due_date', isset($task) && $task->due_date ? $task->due_date->format('Y-m-d') : '') }}">
 </div>

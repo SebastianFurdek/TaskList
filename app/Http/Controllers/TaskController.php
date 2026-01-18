@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Task;
 use App\Models\Project;
+use App\Models\Category;
 
 class TaskController extends Controller
 {
@@ -24,7 +25,8 @@ class TaskController extends Controller
     {
         // pass user's projects for assignment
         $projects = Project::where('user_id', auth()->id())->get();
-        return view('tasks.create', compact('projects'));
+        $categories = Category::where('user_id', auth()->id())->orderBy('name')->get();
+        return view('tasks.create', compact('projects', 'categories'));
     }
 
     /**
@@ -38,6 +40,8 @@ class TaskController extends Controller
             'due_date' => 'nullable|date',
             'completed' => 'sometimes|boolean',
             'project_id' => 'nullable|integer|exists:projects,id',
+            'categories' => 'nullable|array',
+            'categories.*' => 'integer|exists:categories,id',
         ]);
 
         // if project_id provided, ensure the project belongs to the user
@@ -48,10 +52,21 @@ class TaskController extends Controller
             }
         }
 
+        // ensure provided categories belong to the user
+        $categoryIds = [];
+        if (!empty($data['categories'])) {
+            $valid = Category::whereIn('id', $data['categories'])->where('user_id', auth()->id())->pluck('id')->toArray();
+            $categoryIds = $valid;
+        }
+
         $data['user_id'] = auth()->id();
         $data['completed'] = isset($data['completed']) && $data['completed'] ? 1 : 0;
 
         $task = Task::create($data);
+
+        if (!empty($categoryIds)) {
+            $task->categories()->sync($categoryIds);
+        }
 
         return redirect()->route('tasks.index')->with('success', 'Úloha vytvorená.');
     }
@@ -72,7 +87,8 @@ class TaskController extends Controller
     {
         $this->ensureOwnership($task);
         $projects = Project::where('user_id', auth()->id())->get();
-        return view('tasks.edit', compact('task','projects'));
+        $categories = Category::where('user_id', auth()->id())->orderBy('name')->get();
+        return view('tasks.edit', compact('task','projects','categories'));
     }
 
     /**
@@ -88,6 +104,8 @@ class TaskController extends Controller
             'due_date' => 'nullable|date',
             'completed' => 'sometimes|boolean',
             'project_id' => 'nullable|integer|exists:projects,id',
+            'categories' => 'nullable|array',
+            'categories.*' => 'integer|exists:categories,id',
         ]);
 
         if (!empty($data['project_id'])) {
@@ -97,9 +115,19 @@ class TaskController extends Controller
             }
         }
 
+        // ensure provided categories belong to the user
+        $categoryIds = [];
+        if (!empty($data['categories'])) {
+            $valid = Category::whereIn('id', $data['categories'])->where('user_id', auth()->id())->pluck('id')->toArray();
+            $categoryIds = $valid;
+        }
+
         $data['completed'] = isset($data['completed']) && $data['completed'] ? 1 : 0;
 
         $task->update($data);
+
+        // sync categories (if none provided, detach)
+        $task->categories()->sync($categoryIds);
 
         return redirect()->route('tasks.index')->with('success', 'Úloha upravená.');
     }
