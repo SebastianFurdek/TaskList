@@ -11,11 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('category_task', function (Blueprint $table) {
-            $table->foreignId('category_id')->constrained()->onDelete('cascade');
-            $table->foreignId('task_id')->constrained()->onDelete('cascade');
-            $table->primary(['category_id','task_id']);
-        });
+            Schema::create('category_task', function (Blueprint $table) {
+                $table->id();
+                $table->foreignId('category_id')->constrained()->onDelete('cascade');
+                $table->foreignId('task_id')->constrained()->onDelete('cascade');
+
+                //zabrani duplikacii
+                $table->unique(['category_id', 'task_id']);
+            });
     }
 
     /**

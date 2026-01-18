@@ -11,11 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
+        // Vytvoriť tabuľku "categories"
         Schema::create('categories', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('user_id')->constrained()->onDelete('users');
             $table->string('name');
-            $table->string('color')->nullable(); // hex alebo názov
-            $table->timestamps();
+            $table->string('color', 20)->nullable();
+            $table->timestamp();
         });
     }
 
