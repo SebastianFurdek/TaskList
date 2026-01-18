@@ -26,14 +26,7 @@ class CategoryController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Category $category)
-    {
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(Request $request)
+    public function store(Category $request)
     {
         $data = $request->validate([
             'name' => 'required|string|max:255',
@@ -45,6 +38,13 @@ class CategoryController extends Controller
         Category::create($data);
 
         return redirect()->route('categories.index')->with('success', 'Kategória vytvorená.');
+    }
+
+    /**
+     * Display the specified resource.
+     */
+    public function show(Request $request)
+    {
     }
 
     /**
