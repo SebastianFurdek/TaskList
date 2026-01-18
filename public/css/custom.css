@@ -303,4 +303,64 @@
 /* ensure card content sits above the strip */
 .task-item > * { position: relative; z-index: 2; }
 
+/* ===== Project list styles (match task list look) ===== */
+/* Use .project-item on container elements in projects index to get the same modern look as .task-item */
+.project-item,
+.project-card,
+.item-with-stripe {
+    background: #f6f7f9; /* same subtle background as tasks */
+    border-radius: 10px;
+    border: 1px solid #e0e0e0;
+    padding: 12px 14px 12px 18px; /* room for left accent */
+    margin-bottom: 10px;
+    box-shadow: 0 1px 4px rgba(15,23,42,0.06);
+    transition: transform .15s ease, box-shadow .15s ease, background-color .12s ease;
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+/* left gray accent strip to visually match tasks */
+.project-item::before,
+.project-card::before,
+.item-with-stripe::before {
+    content: "";
+    position: absolute;
+    left: 8px;
+    top: 8px;
+    width: 6px;
+    height: calc(100% - 16px);
+    border-radius: 4px;
+    background-color: #e0e0e0;
+    z-index: 1;
+}
+
+/* ensure inner content sits above the accent */
+.project-item > *,
+.project-card > *,
+.item-with-stripe > * {
+    position: relative;
+    z-index: 2;
+}
+
+.project-item:hover,
+.project-card:hover,
+.item-with-stripe:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 14px 40px rgba(15,23,42,0.12);
+    background: #ffffff;
+}
+
+/* small helper classes for project content */
+.project-title { font-weight: 600; color: #212529; }
+.project-meta { font-size: 0.9rem; color: #6c757d; }
+
+@media (max-width: 576px) {
+    .project-item, .project-card, .item-with-stripe { padding: 10px; }
+    .project-item::before, .project-card::before { left: 10px; top: 10px; height: calc(100% - 20px); }
+}
+
+/* ===== end project list styles ===== */
+
 /* end of file */

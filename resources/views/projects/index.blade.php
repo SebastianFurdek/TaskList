@@ -22,13 +22,13 @@
                 <p class="mb-0">Nemáte žiadne projekty. Vytvorte si prvý projekt.</p>
             </div>
         @else
-            <div class="list-group">
+            <div class="">
                 @foreach($projects as $project)
-                    <div class="list-group-item p-3">
-                        <div class="d-flex justify-content-between align-items-start">
+                    <div class="project-item">
+                        <div class="d-flex justify-content-between align-items-start w-100">
                             <div>
-                                <div class="fw-semibold mb-1">{{ $project->name }}</div>
-                                <div class="small text-muted mb-2">{{ \Illuminate\Support\Str::limit($project->description, 120) }}</div>
+                                <div class="project-title mb-1">{{ $project->name }}</div>
+                                <div class="project-meta small mb-2">{{ \Illuminate\Support\Str::limit($project->description, 120) }}</div>
 
                                 {{-- nested tasks for this project --}}
                                 @if($project->tasks && $project->tasks->count())
@@ -36,7 +36,7 @@
                                         <div class="small text-muted mb-1">Úlohy v tomto projekte:</div>
                                         <div class="list-group list-group-flush">
                                             @foreach($project->tasks as $ptask)
-                                                <div class="list-group-item d-flex align-items-center py-1 px-0">
+                                                <div class="d-flex align-items-center py-1 px-0">
                                                     <form action="{{ route('tasks.complete', $ptask->id) }}" method="POST" class="me-2 complete-form">
                                                         @csrf
                                                         <input type="checkbox" class="form-check-input complete-checkbox" {{ $ptask->completed ? 'checked disabled' : '' }}>

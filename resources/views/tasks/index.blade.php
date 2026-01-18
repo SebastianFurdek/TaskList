@@ -40,7 +40,8 @@
                             <div class="d-flex align-items-center flex-wrap">
                                 <a href="{{ route('tasks.show', $task->id) }}" class="mb-0 text-decoration-none fw-semibold text-truncate {{ $task->completed ? 'text-decoration-line-through text-muted' : '' }}" style="max-width:100%;">{{ $task->title }}</a>
                                 @if($task->project)
-                                    <span class="badge bg-secondary ms-2 small">{{ $task->project->name }}</span>
+                                    {{-- show project name subtly (no highlighting) --}}
+                                    <small class="text-muted ms-2">{{ $task->project->name }}</small>
                                 @endif
 
                                 {{-- category badges --}}
@@ -85,7 +86,7 @@
             const csrf = csrfMeta ? csrfMeta.getAttribute('content') : null;
 
             document.querySelectorAll('.complete-checkbox').forEach(function (checkbox) {
-                checkbox.addEventListener('change', async function (e) {
+                checkbox.addEventListener('change', async function () {
                     if (this.disabled) return;
 
                     const form = this.closest('form.complete-form');
