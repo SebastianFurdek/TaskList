@@ -46,6 +46,13 @@
                         <li class="nav-item">
                             <a class="nav-link text-white" href="{{ route('tasks.index') }}">Úlohy</a>
                         </li>
+                        @auth
+                            @if(auth()->user()->role === 'admin')
+                                <li class="nav-item">
+                                    <a class="nav-link text-white {{ request()->routeIs('admin.users.*') ? 'active' : '' }}" href="{{ route('admin.users.index') }}">Správa používateľov</a>
+                                </li>
+                            @endif
+                        @endauth
                     </ul>
 
                     <!-- Right Side Of Navbar -->

@@ -66,3 +66,10 @@ use App\Http\Controllers\CategoryController;
 Route::middleware(['auth'])->group(function () {
     Route::resource('/categories', CategoryController::class)->except(['show']);
 });
+
+// Admin area: only admins can access - manage users
+use App\Http\Controllers\Admin\UserController as AdminUserController;
+Route::middleware(['auth','admin'])->prefix('admin')->name('admin.')->group(function () {
+    Route::resource('users', AdminUserController::class)->only(['index','destroy']);
+});
+
