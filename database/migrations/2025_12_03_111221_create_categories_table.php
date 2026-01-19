@@ -11,6 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
+        // If the table already exists (e.g. created manually or by previous run), skip creation to avoid errors
+        if (Schema::hasTable('categories')) {
+            return;
+        }
+
         // Vytvoriť tabuľku "categories"
         Schema::create('categories', function (Blueprint $table) {
             $table->id();

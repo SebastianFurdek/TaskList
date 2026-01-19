@@ -20,6 +20,7 @@ return new class extends Migration
             // use Laravel timestamps() helper instead of manual created_at/updated_at
             $table->rememberToken();
             $table->timestamps();
+
         });
 
         Schema::create('password_reset_tokens', function (Blueprint $table) {
