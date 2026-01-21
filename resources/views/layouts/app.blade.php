@@ -16,8 +16,9 @@
     <!-- Scripts -->
     @vite(['resources/sass/app.scss', 'resources/js/app.js'])
 
-    <!-- Custom external CSS (ensures at least 10 custom rules are loaded) -->
     <link rel="stylesheet" href="{{ asset('css/custom.css') }}">
+
+    <style>body { padding-bottom: 60px; }</style>
 </head>
 <body>
     <div id="app">
@@ -104,8 +105,19 @@
                 </div>
             </div>
         </main>
+
+        <nav class="navbar navbar-dark bg-primary fixed-bottom py-2">
+            <div class="container d-flex justify-content-between align-items-center">
+                <div class="text-white small">© {{ date('Y') }} TaskManager</div>
+                <div class="text-white small d-none d-md-block">Vývoj aplikácií pre internet a intranet (VAII)</div>
+                <div class="text-white small">
+                    <a class="text-white text-decoration-none me-2" href="https://github.com/SebastianFurdek/TaskList.git" target="_blank">GitHub</a>
+                </div>
+            </div>
+        </nav>
     </div>
-    {{-- render pushed scripts from child views --}}
+
     @stack('scripts')
 </body>
+
 </html>
