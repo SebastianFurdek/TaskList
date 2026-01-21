@@ -7,7 +7,6 @@ window.Alpine = Alpine;
 Alpine.start();
 
 document.addEventListener('DOMContentLoaded', function () {
-    // Confirm before delete (for forms with method DELETE)
     document.addEventListener('submit', function (e) {
         const form = e.target;
         const methodInput = form.querySelector('input[name="_method"][value="DELETE"]');
@@ -17,25 +16,19 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }, true);
 
-    // Handle checkbox-based completes (list view)
-    // Use event delegation so dynamically added items are handled as well
     document.addEventListener('change', function (e) {
         const cb = e.target;
         if (!cb || !cb.matches('.complete-checkbox')) return;
 
-        // only act when checkbox is being checked (not unchecked)
         if (!cb.checked) return;
 
         const form = cb.closest('form.complete-form');
         if (!form) return;
 
-        // No confirmation on checkbox change (user requested immediate completion)
-        // proceed directly
 
         const action = form.getAttribute('action');
         const token = document.querySelector('meta[name="csrf-token"]') ? document.querySelector('meta[name="csrf-token"]').getAttribute('content') : null;
 
-        // disable checkbox while request is in-flight
         cb.disabled = true;
 
         fetch(action, {
@@ -60,7 +53,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 return { raw: text, json: json };
             });
         }).then(function (result) {
-            // If server returned JSON, require success === true
             if (result.json) {
                 if (result.json.success === true) {
                     // ok
@@ -74,18 +66,18 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
             }
 
-            // remove the list item (support .task-item used by custom.css)
+            // odstrániť položku zo zoznamu
             const item = form.closest('.task-item') || form.closest('.list-group-item');
             if (item) item.remove();
 
-            // update counter
+            // aktualizovať počítadlo v dashboarde, ak je prítomné
             const completedCounter = document.querySelector('#completed-counter');
             if (completedCounter) {
                 const current = parseInt(completedCounter.textContent || '0', 10);
                 completedCounter.textContent = (current + 1).toString();
             }
 
-            // no user-facing notification on completion (silent)
+
         }).catch(function (err) {
             console.error(err);
             alert('Pri označovaní úlohy nastala chyba: ' + err.message);
@@ -94,7 +86,7 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 
-    // Handle form-based completes (show page / alternate forms)
+
     document.querySelectorAll('form[action][method="POST"]').forEach(function (form) {
         const action = form.getAttribute('action');
         if (action && action.includes('/tasks/') && action.includes('/complete')) {
@@ -137,7 +129,7 @@ document.addEventListener('DOMContentLoaded', function () {
                         }
                     }
 
-                    // Try removing row (table layout)
+
                     let removed = false;
                     const row = form.closest('tr');
                     if (row) {
@@ -145,7 +137,7 @@ document.addEventListener('DOMContentLoaded', function () {
                         removed = true;
                     }
 
-                    // Try removing card column (card/grid layout)
+
                     if (!removed) {
                         const col = form.closest('.col-12, .col-md-6, .col-lg-4');
                         if (col) {
@@ -154,7 +146,7 @@ document.addEventListener('DOMContentLoaded', function () {
                         }
                     }
 
-                    // Try removing the list row (.task-item) or fallback card
+
                     if (!removed) {
                         const titem = form.closest('.task-item') || form.closest('.list-group-item');
                         if (titem) {
@@ -169,13 +161,13 @@ document.addEventListener('DOMContentLoaded', function () {
                         }
                     }
 
-                    // If nothing removed (we are likely on a show page), redirect to /tasks
+
                     if (!removed) {
                         window.location.href = '/tasks';
                         return;
                     }
 
-                    // Optionally update a counter in the dashboard if present
+
                     const completedCounter = document.querySelector('#completed-counter');
                     if (completedCounter) {
                         const current = parseInt(completedCounter.textContent || '0', 10);
@@ -189,7 +181,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 
-    // Client-side enhancement: prevent submit if form invalid and show first invalid field
+
     document.querySelectorAll('form').forEach(function (form) {
         form.addEventListener('submit', function (e) {
             if (!form.checkValidity()) {
@@ -201,7 +193,7 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 
-    // Project filter (AJAX) - use event delegation in case tasks view is replaced
+
     document.addEventListener('change', function (e) {
         const el = e.target;
         if (!el || el.id !== 'project-filter') return;
@@ -210,7 +202,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const container = document.getElementById('tasks-list-container');
         if (!container) return;
 
-        // Build URL with project_id param
+
         const url = new URL(window.location.href);
         if (pid) url.searchParams.set('project_id', pid); else url.searchParams.delete('project_id');
 
