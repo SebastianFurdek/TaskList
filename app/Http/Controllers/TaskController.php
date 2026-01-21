@@ -12,10 +12,38 @@ class TaskController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $tasks = Task::where('user_id', auth()->id())->with('project','categories')->get();
-        return view('tasks.index', compact('tasks'));
+        $userId = auth()->id();
+
+        // base query for user's tasks
+        $query = Task::where('user_id', $userId)->with('project')->orderBy('due_date');
+
+        // optional search
+        if ($request->filled('q')) {
+            $q = $request->get('q');
+            $query->where(function($sub) use ($q) {
+                $sub->where('title', 'like', "%{$q}%")->orWhere('description', 'like', "%{$q}%");
+            });
+        }
+
+        // optional project filter
+        if ($request->filled('project_id')) {
+            $query->where('project_id', $request->get('project_id'));
+        }
+
+        $tasks = $query->get();
+
+        // load user's projects for the filter select
+        $projects = Project::where('user_id', $userId)->get();
+
+        // If AJAX, return rendered partial HTML for the tasks list
+        if ($request->ajax()) {
+            $html = view('tasks._list', compact('tasks'))->render();
+            return response()->json(['html' => $html]);
+        }
+
+        return view('tasks.index', compact('tasks', 'projects'));
     }
 
     /**

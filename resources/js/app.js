@@ -206,4 +206,37 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         });
     });
+
+    // Project filter (AJAX) - use event delegation in case tasks view is replaced
+    document.addEventListener('change', function (e) {
+        const el = e.target;
+        if (!el || el.id !== 'project-filter') return;
+
+        const pid = el.value;
+        const container = document.getElementById('tasks-list-container');
+        if (!container) return;
+
+        // Build URL with project_id param
+        const url = new URL(window.location.href);
+        if (pid) url.searchParams.set('project_id', pid); else url.searchParams.delete('project_id');
+
+        container.style.opacity = '0.6';
+
+        fetch(url.href, {
+            headers: { 'X-Requested-With': 'XMLHttpRequest', 'Accept': 'application/json' },
+            credentials: 'same-origin'
+        }).then(function (resp) {
+            if (!resp.ok) throw resp;
+            return resp.json();
+        }).then(function (json) {
+            if (json && json.html !== undefined) {
+                container.innerHTML = json.html;
+            }
+            container.style.opacity = '';
+        }).catch(function (err) {
+            console.error('Filter load error', err);
+            container.style.opacity = '';
+            alert('Chyba pri načítaní úloh pre tento projekt.');
+        });
+    });
 });
