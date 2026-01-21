@@ -20,7 +20,6 @@ class ProjectAttachmentController extends Controller
         $file = $request->file('attachment');
         $path = $file->store("project-attachments/{$project->id}", 'public');
 
-        // avoid mass-assignment static analysis warnings: create model via new + save on relationship
         $attachment = new ProjectAttachment();
         $attachment->filename = $file->getClientOriginalName();
         $attachment->path = $path;

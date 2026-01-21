@@ -7,9 +7,6 @@ use App\Models\Project;
 
 class ProjectController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
         // load projects for the user and eager-load only that user's tasks
@@ -19,17 +16,11 @@ class ProjectController extends Controller
         return view('projects.index', compact('projects'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
         return view('projects.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
         $data = $request->validate([
@@ -50,7 +41,6 @@ class ProjectController extends Controller
 
         $project = Project::create($data);
 
-        // handle attachments if any (support single or multiple uploads)
         try {
             $files = [];
             if ($request->hasFile('attachments')) {
@@ -83,12 +73,8 @@ class ProjectController extends Controller
         return redirect()->route('projects.index')->with('success', 'Projekt bol vytvorený.');
     }
 
-    /**
-     * Display the specified resource.
-     */
     public function show(Project $project)
     {
-        // ensure the user owns the project
         if ($project->user_id !== auth()->id()) {
             abort(403);
         }
@@ -96,9 +82,6 @@ class ProjectController extends Controller
         return view('projects.show', compact('project'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit(Project $project)
     {
         if ($project->user_id !== auth()->id()) {
@@ -108,9 +91,6 @@ class ProjectController extends Controller
         return view('projects.edit', compact('project'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, Project $project)
     {
         if ($project->user_id !== auth()->id()) {
@@ -124,13 +104,11 @@ class ProjectController extends Controller
             'attachments.*' => 'file|max:10240|mimes:jpg,jpeg,png,gif,pdf,doc,docx,xls,xlsx,zip,txt',
         ]);
 
-        // prevent attachments array from being mass-assigned to project
         if (array_key_exists('attachments', $data)) {
             unset($data['attachments']);
         }
         $project->update($data);
 
-        // handle attachments if any (append) - robust & non-fatal
         try {
             $files = [];
             if ($request->hasFile('attachments')) {
@@ -162,9 +140,6 @@ class ProjectController extends Controller
         return redirect()->route('projects.index')->with('success', 'Projekt bol upravený.');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(Project $project)
     {
         if ($project->user_id !== auth()->id()) {

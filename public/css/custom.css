@@ -165,65 +165,56 @@
 .text-gray-800 { color: #5a5c69 !important; }
 .text-gray-300 { color: #dddfeb !important; }
 
-/* zabezpečí, že text a ikona budú nad pásikom */
 .card-body { position: relative; z-index: 2; }
 
-/* Task item card/list row */
 .task-item {
-    background: #f6f7f9; /* subtle light-gray background so item stands out from page */
+    background: #f6f7f9;
     border-radius: 10px;
-    /*oramovanie sivou farbou*/
     border: 1px solid #e0e0e0;
-    padding: 12px 14px 12px 18px; /* extra left padding to make room for the strip */
+    padding: 12px 14px 12px 18px;
     margin-bottom: 10px;
-    box-shadow: 0 1px 4px rgba(15,23,42,0.06); /* soft shadow for separation */
+    box-shadow: 0 1px 4px rgba(15,23,42,0.06);
     transition: transform .15s ease, box-shadow .15s ease, background-color .12s ease;
-    position: relative; /* needed for the left accent strip */
+    position: relative;
 }
 
-/* left gray accent strip */
 .task-item::before {
     content: "";
     position: absolute;
-    left: 8px; /* small inset so strip doesn't touch outer container edge */
+    left: 8px;
     top: 8px;
     width: 6px;
-    height: calc(100% - 16px); /* respect top/bottom inset */
+    height: calc(100% - 16px);
     border-radius: 4px;
-    background-color: #e0e0e0; /* subtle gray strip */
+    background-color: #e0e0e0;
     z-index: 1;
 }
 
 .task-item:hover {
     transform: translateY(-6px);
     box-shadow: 0 14px 40px rgba(15,23,42,0.12);
-    background: #ffffff; /* slightly brighter on hover */
+    background: #ffffff;
 }
 
-/* Slightly muted appearance for tasks marked completed */
 .task-item.task-completed {
     opacity: 0.85;
     filter: grayscale(8%);
 }
 
-/* Make internal layout consistent: left checkbox, content, actions */
 .task-item .complete-form { flex: 0 0 auto; }
 .task-item .flex-grow-1 { min-width: 0; }
 
-/* ensure card content sits above the strip */
 .task-item > * { position: relative; z-index: 2; }
 
-/* small responsive tweak */
 @media (max-width: 576px) {
     .task-item { padding: 10px; }
     .task-item::before { left: 10px; top: 10px; height: calc(100% - 20px); }
     .task-item .small.text-muted { font-size: 11px; }
 }
 
-/* Dashboard card style */
 .dashboard-card {
     border-radius: 12px;
-    padding: 0; /* inner padding handled by .card-body */
+    padding: 0;
     transition: transform .15s ease, box-shadow .15s ease, background-color .15s ease;
     will-change: transform;
     overflow: hidden;
@@ -237,12 +228,10 @@
     background-color: #ffffff;
 }
 
-/* subtle accent strip already exists via .card-left-* classes; ensure the strip stays visible */
 .dashboard-card.border-left-primary { border-left-width: 6px; }
 .dashboard-card.border-left-success { border-left-width: 6px; }
 .dashboard-card.border-left-info { border-left-width: 6px; }
 
-/* Left accent strip for cards (match markup using "border-left-*" classes) */
 .card.border-left-primary::before,
 .dashboard-card.border-left-primary::before {
     content: "";
@@ -253,7 +242,7 @@
     height: 100%;
     border-radius: 0.25rem 0 0 0.25rem;
     background-color: #4e73df;
-    z-index: 1; /* behind card-body (which uses z-index:2) */
+    z-index: 1;
 }
 
 .card.border-left-success::before,
@@ -295,23 +284,19 @@
     z-index: 1;
 }
 
-/* Left accent strip for task items */
 .task-item {
-    position: relative; /* needed for pseudo-element */
+    position: relative;
 }
 
-/* ensure card content sits above the strip */
 .task-item > * { position: relative; z-index: 2; }
 
-/* ===== Project list styles (match task list look) ===== */
-/* Use .project-item on container elements in projects index to get the same modern look as .task-item */
 .project-item,
 .project-card,
 .item-with-stripe {
-    background: #f6f7f9; /* same subtle background as tasks */
+    background: #f6f7f9;
     border-radius: 10px;
     border: 1px solid #e0e0e0;
-    padding: 12px 14px 12px 18px; /* room for left accent */
+    padding: 12px 14px 12px 18px;
     margin-bottom: 10px;
     box-shadow: 0 1px 4px rgba(15,23,42,0.06);
     transition: transform .15s ease, box-shadow .15s ease, background-color .12s ease;
@@ -321,7 +306,6 @@
     gap: 0.75rem;
 }
 
-/* left gray accent strip to visually match tasks */
 .project-item::before,
 .project-card::before,
 .item-with-stripe::before {
@@ -336,7 +320,6 @@
     z-index: 1;
 }
 
-/* ensure inner content sits above the accent */
 .project-item > *,
 .project-card > *,
 .item-with-stripe > * {
@@ -352,7 +335,6 @@
     background: #ffffff;
 }
 
-/* small helper classes for project content */
 .project-title { font-weight: 600; color: #212529; }
 .project-meta { font-size: 0.9rem; color: #6c757d; }
 
@@ -361,6 +343,4 @@
     .project-item::before, .project-card::before { left: 10px; top: 10px; height: calc(100% - 20px); }
 }
 
-/* ===== end project list styles ===== */
 
-/* end of file */

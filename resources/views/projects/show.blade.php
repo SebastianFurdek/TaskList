@@ -74,7 +74,6 @@
         </div>
     </div>
 
-    {{-- Attachments (stacked below tasks) --}}
     <div class="card mb-4">
         <div class="card-body">
             <h5 class="mb-3">Prílohy</h5>
@@ -83,7 +82,7 @@
                 @csrf
                 <div class="input-group">
                     <input type="file" name="attachment" class="form-control form-control-sm">
-                    <button class="btn btn-outline-secondary btn-sm" type="submit">Nahráť</button>
+                    <button class="btn btn-outline-secondary btn-sm" type="submit">Nahrať</button>
                 </div>
                 @error('attachment') <div class="text-danger small mt-1">{{ $message }}</div> @enderror
             </form>
