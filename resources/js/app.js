@@ -33,9 +33,8 @@ document.addEventListener('DOMContentLoaded', function () {
         // proceed directly
 
         const action = form.getAttribute('action');
-        const token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+        const token = document.querySelector('meta[name="csrf-token"]') ? document.querySelector('meta[name="csrf-token"]').getAttribute('content') : null;
 
-        console.log('Completing task via', action);
         // disable checkbox while request is in-flight
         cb.disabled = true;
 
@@ -50,20 +49,17 @@ document.addEventListener('DOMContentLoaded', function () {
             },
             body: JSON.stringify({})
         }).then(function (resp) {
-            console.log('Response status', resp.status, 'ok', resp.ok);
             if (!resp.ok) {
                 return resp.text().then(function (text) {
                     throw new Error('Server error ' + resp.status + ': ' + text);
                 });
             }
-            // try parse JSON, but if not JSON, proceed
             return resp.text().then(function (text) {
                 let json = null;
                 try { json = JSON.parse(text); } catch (err) { /* not json */ }
                 return { raw: text, json: json };
             });
         }).then(function (result) {
-            console.log('Complete result', result);
             // If server returned JSON, require success === true
             if (result.json) {
                 if (result.json.success === true) {
@@ -72,15 +68,14 @@ document.addEventListener('DOMContentLoaded', function () {
                     throw new Error(result.json.message || 'Server rejected completion');
                 }
             } else {
-                // No JSON — inspect raw text to detect HTML redirects or login pages
                 const raw = (result.raw || '').toLowerCase();
                 if (raw.includes('<!doctype') || raw.includes('<html') || raw.includes('login') || raw.includes('csrf')) {
                     throw new Error('Unexpected HTML response from server (maybe redirected to login).');
                 }
-                // otherwise treat as success
             }
-            // remove the list item
-            const item = form.closest('.list-group-item');
+
+            // remove the list item (support .task-item used by custom.css)
+            const item = form.closest('.task-item') || form.closest('.list-group-item');
             if (item) item.remove();
 
             // update counter
@@ -91,7 +86,7 @@ document.addEventListener('DOMContentLoaded', function () {
             }
 
             // no user-facing notification on completion (silent)
-         }).catch(function (err) {
+        }).catch(function (err) {
             console.error(err);
             alert('Pri označovaní úlohy nastala chyba: ' + err.message);
             cb.checked = false;
@@ -99,17 +94,14 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 
-    // Handle form-based completes (show view)
+    // Handle form-based completes (show page / alternate forms)
     document.querySelectorAll('form[action][method="POST"]').forEach(function (form) {
         const action = form.getAttribute('action');
         if (action && action.includes('/tasks/') && action.includes('/complete')) {
             form.addEventListener('submit', function (e) {
                 e.preventDefault();
-                // No confirmation for form-based complete actions; proceed directly
+                const token = document.querySelector('meta[name="csrf-token"]') ? document.querySelector('meta[name="csrf-token"]').getAttribute('content') : null;
 
-                const token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-
-                console.log('Completing task via (form submit) ', action);
                 fetch(action, {
                     method: 'POST',
                     credentials: 'same-origin',
@@ -121,7 +113,6 @@ document.addEventListener('DOMContentLoaded', function () {
                     },
                     body: JSON.stringify({})
                 }).then(function (resp) {
-                    console.log('Response status', resp.status, 'ok', resp.ok);
                     if (!resp.ok) {
                         return resp.text().then(function (text) {
                             throw new Error('Server error ' + resp.status + ': ' + text);
@@ -133,7 +124,6 @@ document.addEventListener('DOMContentLoaded', function () {
                         return { raw: text, json: json };
                     });
                 }).then(function (result) {
-                    console.log('Complete (form) result', result);
                     if (result.json) {
                         if (result.json.success === true) {
                             // ok
@@ -145,8 +135,8 @@ document.addEventListener('DOMContentLoaded', function () {
                         if (raw.includes('<!doctype') || raw.includes('<html') || raw.includes('login') || raw.includes('csrf')) {
                             throw new Error('Unexpected HTML response from server (maybe redirected to login).');
                         }
-                        // otherwise treat as success
                     }
+
                     // Try removing row (table layout)
                     let removed = false;
                     const row = form.closest('tr');
@@ -164,12 +154,18 @@ document.addEventListener('DOMContentLoaded', function () {
                         }
                     }
 
-                    // Try removing the card itself
+                    // Try removing the list row (.task-item) or fallback card
                     if (!removed) {
-                        const card = form.closest('.card');
-                        if (card) {
-                            card.remove();
+                        const titem = form.closest('.task-item') || form.closest('.list-group-item');
+                        if (titem) {
+                            titem.remove();
                             removed = true;
+                        } else {
+                            const card = form.closest('.card');
+                            if (card) {
+                                card.remove();
+                                removed = true;
+                            }
                         }
                     }
 
@@ -185,9 +181,7 @@ document.addEventListener('DOMContentLoaded', function () {
                         const current = parseInt(completedCounter.textContent || '0', 10);
                         completedCounter.textContent = (current + 1).toString();
                     }
-
-                    // no user-facing notification on completion (silent)
-                 }).catch(function (err) {
+                }).catch(function (err) {
                     console.error(err);
                     alert('Pri označovaní úlohy nastala chyba: ' + err.message);
                 });
@@ -240,3 +234,4 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 });
+

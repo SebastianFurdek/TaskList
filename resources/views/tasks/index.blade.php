@@ -34,6 +34,7 @@
             </div>
         </div>
 
+        {{-- čast zoznamu úloh --}}
         <div id="tasks-list-container">
             @include('tasks._list', ['tasks' => $tasks])
         </div>
@@ -47,6 +48,7 @@
                 const filter = document.getElementById('project-filter');
                 if (!filter) return;
 
+                //listener na zmenu filtra
                 filter.addEventListener('change', function () {
                     const pid = this.value;
                     const url = new URL(window.location.href);
